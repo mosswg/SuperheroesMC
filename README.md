@@ -3,7 +3,8 @@ Plugins for a Marvel and DC Superhero based Minecraft server
 
 <h1> Supported Heroes </h1>
 <ul>
-  <li> Flash(Very Early in Development) </li>
+  <li> Flash </li>
+  <li> Iron Fist </li>
   </ul>
 
 
