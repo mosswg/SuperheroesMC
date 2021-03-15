@@ -58,7 +58,7 @@ public class SupermanPowers extends HeroPowers {
         if (ray != null) {
             Entity e = ray.getHitEntity();
             if (e instanceof LivingEntity) {
-                ((LivingEntity) e).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2, 2, false, false));
+                ((LivingEntity) e).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40, 2, false, false));
             }
         }
     }
@@ -66,12 +66,13 @@ public class SupermanPowers extends HeroPowers {
 
 
     public enum inventory implements inv {
-        Helmet(new ItemStack(Material.LEATHER_HELMET), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_HELMET).getItemMeta(), Color.YELLOW), 0),
-        Leggings(new ItemStack(Material.LEATHER_LEGGINGS), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_LEGGINGS).getItemMeta(), Color.fromRGB(44, 180, 2)), 1),
-        Boots(new ItemStack(Material.LEATHER_BOOTS), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_BOOTS).getItemMeta(), Color.YELLOW), 2),
+        Helmet(new ItemStack(Material.LEATHER_HELMET), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_HELMET).getItemMeta(), Color.BLUE), 0),
+        Chestplate(new ItemStack(Material.LEATHER_CHESTPLATE), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_CHESTPLATE).getItemMeta(), Color.BLUE), 1),
+        Leggings(new ItemStack(Material.LEATHER_LEGGINGS), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_LEGGINGS).getItemMeta(), Color.RED), 2),
+        Boots(new ItemStack(Material.LEATHER_BOOTS), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_BOOTS).getItemMeta(), Color.RED), 3),
 
+        FrostBreath(Hero.createPower(Material.BLUE_ICE, "Frost Breath"), 7, SupermanPowers::FrostBreath),
         HeatVision(Hero.createPower(Material.RED_DYE, "Heat Vision"), 8, SupermanPowers::HeatVision),
-        FrostBreath(Hero.createPower(Material.SNOW, "Frost Breath"), 8, SupermanPowers::FrostBreath)
 
         ;
 
