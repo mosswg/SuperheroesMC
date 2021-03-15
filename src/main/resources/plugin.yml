@@ -1,0 +1,19 @@
+name: Superheroes
+version: ${project.version}
+main: net.mossx.superheroes.Superheroes
+api-version: 1.16
+authors: [ mossx ]
+moved-wrongly-threshold: 10000
+moved-too-quickly-threshold: 10000.0
+description: WIP
+website: www.mossx.net
+commands:
+  Superhero:
+    description: WIP
+    usage: /<command> <player or hero> <hero>
+  smfly:
+    description: Superman Style Flight
+    usage: /<command>
+  Potions:
+    description: Display Active Potion Effects With Amplitude
+    usage: /<command>
