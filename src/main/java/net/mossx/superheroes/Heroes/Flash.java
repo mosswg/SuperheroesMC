@@ -25,7 +25,7 @@ import static net.mossx.superheroes.Heroes.Powers.FlashPowers.*;
 import static net.mossx.superheroes.Heroes.Powers.HeroPowers.inv.invKey;
 
 
-public class Flash extends hero implements Listener {
+public class Flash extends Hero implements Listener {
     public static final NamespacedKey speedKey = new NamespacedKey(Superheroes.plugin, "Speed");
     public boolean speedLocked = false;
 

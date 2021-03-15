@@ -2,7 +2,7 @@ package net.mossx.superheroes.Heroes.Powers;
 
 import net.mossx.superheroes.CommandSuperhero;
 import net.mossx.superheroes.Heroes.Superman;
-import net.mossx.superheroes.Heroes.hero;
+import net.mossx.superheroes.Heroes.Hero;
 import net.mossx.superheroes.Superheroes;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -35,7 +35,7 @@ public class SupermanPowers extends HeroPowers {
             }
         }).runTaskLater(Superheroes.plugin, 5L);
 
-        Damageable d = ((Damageable) hero.playerLookingAt(p));
+        Damageable d = ((Damageable) Hero.playerLookingAt(p));
         if (d != null)
             for (int i = 1; i < 5; i++) {
                 d.damage(2);
@@ -56,7 +56,7 @@ public class SupermanPowers extends HeroPowers {
         Leggings(new ItemStack(Material.LEATHER_LEGGINGS), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_LEGGINGS).getItemMeta(), Color.fromRGB(44, 180, 2)), 1),
         Boots(new ItemStack(Material.LEATHER_BOOTS), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_BOOTS).getItemMeta(), Color.YELLOW), 2),
 
-        LazerEyes(hero.createPower(Material.RED_DYE, "Lazer Eyes"), 8, SupermanPowers::LazerEyes)
+        LazerEyes(Hero.createPower(Material.RED_DYE, "Lazer Eyes"), 8, SupermanPowers::LazerEyes)
         ;
 
         ItemStack stack; int position; Consumer<Player> run;

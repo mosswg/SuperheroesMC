@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 import static net.mossx.superheroes.Heroes.Powers.HeroPowers.inv.invKey;
 
-public class Superman extends hero {
+public class Superman extends Hero {
     static final ArrayList<Player> flyingPlayers = new ArrayList<>();
     SupermanPowers powers = new SupermanPowers();
     boolean singleShift = false;
@@ -37,7 +37,7 @@ public class Superman extends hero {
             e.giveEffect(p);
         }
         if (((SupermanPowers)powers).lazer) {
-            Damageable d = ((Damageable) hero.playerLookingAt(p));
+            Damageable d = ((Damageable) Hero.playerLookingAt(p));
             if (d != null)
                 d.damage(1);
         }
@@ -135,7 +135,7 @@ public class Superman extends hero {
             p.addPotionEffect(new PotionEffect(type, 99999, amplitude, false, false));
         }
     }
-    public static class smfly extends hero implements Listener, CommandExecutor {
+    public static class smfly extends Hero implements Listener, CommandExecutor {
         boolean enabled;
         final static double defaultSpeed = 1.5D;
         double speed = defaultSpeed;

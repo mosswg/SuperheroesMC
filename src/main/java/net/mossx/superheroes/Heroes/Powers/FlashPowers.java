@@ -2,7 +2,7 @@ package net.mossx.superheroes.Heroes.Powers;
 
 import net.mossx.superheroes.Heroes.Flash;
 import net.mossx.superheroes.Superheroes;
-import net.mossx.superheroes.Heroes.hero;
+import net.mossx.superheroes.Heroes.Hero;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import static net.mossx.superheroes.Heroes.hero.createPower;
+import static net.mossx.superheroes.Heroes.Hero.createPower;
 
 public class FlashPowers extends HeroPowers {
     public static ArrayList<Player> wallrunningtime = new ArrayList<>();
@@ -83,7 +83,7 @@ public class FlashPowers extends HeroPowers {
 
 
     public static void ThrowLightning(Player p) {
-        Entity pl = hero.playerLookingAt(p);
+        Entity pl = Hero.playerLookingAt(p);
         if (pl == null) {
             RayTraceResult ray = p.rayTraceBlocks(1000, FluidCollisionMode.ALWAYS);
             if (ray != null) {
@@ -173,15 +173,15 @@ public class FlashPowers extends HeroPowers {
         Leggings(new ItemStack(Material.LEATHER_LEGGINGS), HeroPowers.inv.setUnbreakable(HeroPowers.inv.setColor(((LeatherArmorMeta)(new ItemStack(Material.LEATHER_LEGGINGS).getItemMeta())), Color.RED))),
         Boots(new ItemStack(Material.LEATHER_BOOTS), HeroPowers.inv.addEnchantment(HeroPowers.inv.setUnbreakable(HeroPowers.inv.setColor(((LeatherArmorMeta)(new ItemStack(Material.LEATHER_BOOTS).getItemMeta())), Color.RED)), Enchantment.ARROW_INFINITE, 1, true)),
 
-        Slot1(createPower(Material.BLUE_STAINED_GLASS_PANE, "HyperMetabolism", new hero.Tag(PersistentDataType.INTEGER, "Speed", 10)), 18, FlashPowers::HyperMetabolism),
-        Slot2(createPower(Material.LIME_STAINED_GLASS_PANE, "Leap", new hero.Tag(PersistentDataType.INTEGER, "Speed", 15)), 19, FlashPowers::Leap),
-        Slot3(createPower(Material.GREEN_STAINED_GLASS_PANE, "Wall Running", new hero.Tag(PersistentDataType.INTEGER, "Speed", 25)), 20, FlashPowers::WallRunning),
-        Slot4(createPower(Material.YELLOW_STAINED_GLASS_PANE, "Water Walking", new hero.Tag(PersistentDataType.INTEGER, "Speed", 30)), 21, FlashPowers::WaterWalking),
-        Slot5(createPower(Material.ORANGE_STAINED_GLASS_PANE, "Throw Lightning", new hero.Tag(PersistentDataType.INTEGER, "Speed", 35)), 22, FlashPowers::ThrowLightning),
-        Slot6(createPower(Material.RED_STAINED_GLASS_PANE, "Speedforce", new hero.Tag(PersistentDataType.INTEGER, "Speed", 40)), 23, FlashPowers::Speedforce),
-        Slot7(createPower(Material.MAGENTA_STAINED_GLASS_PANE, "Punch", new hero.Tag(PersistentDataType.INTEGER, "Speed", 45)), 24, FlashPowers::Punch),
-        Slot8(createPower(Material.PURPLE_STAINED_GLASS_PANE, "Vibrate", new hero.Tag(PersistentDataType.INTEGER, "Speed", 50)), 25, FlashPowers::Vibrate),
-        Slot9(createPower(Material.BLACK_STAINED_GLASS_PANE, "Freeze", new hero.Tag(PersistentDataType.INTEGER, "Speed", 55)), 26, FlashPowers::Freeze),
+        Slot1(createPower(Material.BLUE_STAINED_GLASS_PANE, "HyperMetabolism", new Hero.Tag(PersistentDataType.INTEGER, "Speed", 10)), 18, FlashPowers::HyperMetabolism),
+        Slot2(createPower(Material.LIME_STAINED_GLASS_PANE, "Leap", new Hero.Tag(PersistentDataType.INTEGER, "Speed", 15)), 19, FlashPowers::Leap),
+        Slot3(createPower(Material.GREEN_STAINED_GLASS_PANE, "Wall Running", new Hero.Tag(PersistentDataType.INTEGER, "Speed", 25)), 20, FlashPowers::WallRunning),
+        Slot4(createPower(Material.YELLOW_STAINED_GLASS_PANE, "Water Walking", new Hero.Tag(PersistentDataType.INTEGER, "Speed", 30)), 21, FlashPowers::WaterWalking),
+        Slot5(createPower(Material.ORANGE_STAINED_GLASS_PANE, "Throw Lightning", new Hero.Tag(PersistentDataType.INTEGER, "Speed", 35)), 22, FlashPowers::ThrowLightning),
+        Slot6(createPower(Material.RED_STAINED_GLASS_PANE, "Speedforce", new Hero.Tag(PersistentDataType.INTEGER, "Speed", 40)), 23, FlashPowers::Speedforce),
+        Slot7(createPower(Material.MAGENTA_STAINED_GLASS_PANE, "Punch", new Hero.Tag(PersistentDataType.INTEGER, "Speed", 45)), 24, FlashPowers::Punch),
+        Slot8(createPower(Material.PURPLE_STAINED_GLASS_PANE, "Vibrate", new Hero.Tag(PersistentDataType.INTEGER, "Speed", 50)), 25, FlashPowers::Vibrate),
+        Slot9(createPower(Material.BLACK_STAINED_GLASS_PANE, "Freeze", new Hero.Tag(PersistentDataType.INTEGER, "Speed", 55)), 26, FlashPowers::Freeze),
 
         ;
 

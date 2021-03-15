@@ -7,7 +7,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class IronFist extends hero {
+public class IronFist extends Hero {
     private boolean toggle = false;
 
     @Override

@@ -19,7 +19,7 @@ import org.bukkit.util.RayTraceResult;
 
 import java.util.function.Predicate;
 
-public abstract class hero implements Cloneable, Listener {
+public abstract class Hero implements Cloneable, Listener {
     public HeroPowers powers;
 
     public abstract void tick(Player p);
@@ -35,9 +35,9 @@ public abstract class hero implements Cloneable, Listener {
     public abstract void onDisable(Player p);
 
     @Override
-    public hero clone() {
+    public Hero clone() {
         try {
-            return (hero)super.clone();
+            return (Hero)super.clone();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -63,7 +63,7 @@ public abstract class hero implements Cloneable, Listener {
     }
 
 
-    public static ItemStack createPower(Material stackType, String name, hero.Tag... Tags) {
+    public static ItemStack createPower(Material stackType, String name, Hero.Tag... Tags) {
         if (name == null) {
             System.out.println(stackType + " Name was Null");
             return new ItemStack(stackType);
@@ -73,10 +73,10 @@ public abstract class hero implements Cloneable, Listener {
         assert meta != null;
         meta.setDisplayName(name);
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        for (hero.Tag tag : Tags) {
+        for (Hero.Tag tag : Tags) {
             tag.set(pdc);
         }
-        hero.Tag.invTag.set(pdc);
+        Hero.Tag.invTag.set(pdc);
         stack.setItemMeta(meta);
         return stack;
     }
