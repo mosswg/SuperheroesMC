@@ -7,6 +7,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -19,6 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.BoundingBox;
 
 public abstract class hero implements Cloneable, Listener {
 
@@ -47,6 +49,14 @@ public abstract class hero implements Cloneable, Listener {
 
     public String toString() {
         return getName();
+    }
+
+    public static Entity playerLookingAt(Player p) {
+        for (Entity ent : p.getNearbyEntities(100, 100, 100)) {
+            if (p.hasLineOfSight(ent))
+                return ent;
+        }
+        return null;
     }
 
 
