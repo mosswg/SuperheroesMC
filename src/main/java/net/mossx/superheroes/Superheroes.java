@@ -1,8 +1,9 @@
 package net.mossx.superheroes;
 
 import net.mossx.superheroes.Heroes.Powers.FlashPowers;
+import net.mossx.superheroes.Heroes.Powers.HeroPowers;
 import net.mossx.superheroes.Heroes.Superman;
-import net.mossx.superheroes.Heroes.hero;
+import net.mossx.superheroes.Heroes.Hero;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -10,6 +11,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -39,8 +42,8 @@ public final class Superheroes extends JavaPlugin implements Listener {
         scheduler.scheduleSyncRepeatingTask(this, () -> {
             Collection<? extends Player> players = Bukkit.getOnlinePlayers();
             for (Player p : players) {
-                for (Object h : CommandSuperhero.getPlayerHeroes(p)) {
-                    ((hero)h).tick(p);
+                for (Hero h : CommandSuperhero.getPlayerHeroes(p)) {
+                    h.tick(p);
                 }
             }
         }, 0L, 1L);
@@ -49,16 +52,14 @@ public final class Superheroes extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEvent e) {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            for (Object h : CommandSuperhero.getPlayerHeroes(p)) {
-                ((hero)h).playerInteractEvent(e);
-                }
-            }
+        for (Hero h : CommandSuperhero.getPlayerHeroes(e.getPlayer())) {
+            h.playerInteractEvent(e);
         }
+    }
 
     @EventHandler
     public void onPlayerPlace(BlockPlaceEvent event) {
-        if (hero.inv.isInventory(event.getItemInHand()))
+        if (HeroPowers.inv.isInventory(event.getItemInHand()))
             event.setCancelled(true);
     }
 
@@ -71,25 +72,33 @@ public final class Superheroes extends JavaPlugin implements Listener {
             event.setTo(to);
             return;
         }
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            for (Object h : CommandSuperhero.getPlayerHeroes(p)) {
-                ((hero)h).playerMoveEvent(event);
+        for (Hero h : CommandSuperhero.getPlayerHeroes(event.getPlayer())) {
+                h.playerMoveEvent(event);
             }
-        }
     }
 
     @EventHandler
     public void onPlayerSneak(PlayerToggleSneakEvent e) {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            for (Object h : CommandSuperhero.getPlayerHeroes(p)) {
-                ((hero)h).playerSneakEvent(e);
+            for (Hero h : CommandSuperhero.getPlayerHeroes(e.getPlayer())) {
+                h.playerSneakEvent(e);
             }
-        }
+    }
+
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent e) {
+        if (e.getEntity().hasMetadata("DeathMessage"))
+            e.setDeathMessage(((String)e.getEntity().getMetadata("DeathMessaege").get(0).value()));
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {}
 
+
+    /**
+     * Sends Given Message to My Minecraft Account(mossx) for debugging
+     * @deprecated
+     * @param message
+     */
     public static void sendMossxMessage(String message) {
         if (Bukkit.getPlayerExact("mossx") != null)
             Bukkit.getPlayerExact("mossx").sendMessage(message);
@@ -98,8 +107,8 @@ public final class Superheroes extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         for (Player p : Bukkit.getOnlinePlayers()) {
-            for (Object h : CommandSuperhero.getPlayerHeroes(p)) {
-                ((hero)h).onDisable(p);
+            for (Hero h : CommandSuperhero.getPlayerHeroes(p)) {
+                h.onDisable(p);
                 }
             }
         }

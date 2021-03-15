@@ -4,7 +4,7 @@ import net.mossx.superheroes.Heroes.Flash;
 import net.mossx.superheroes.Heroes.IronFist;
 import net.mossx.superheroes.Heroes.Powers.HeroPowers;
 import net.mossx.superheroes.Heroes.Superman;
-import net.mossx.superheroes.Heroes.hero;
+import net.mossx.superheroes.Heroes.Hero;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -32,7 +32,7 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
     private boolean enable;
     private boolean setEnabled;
 
-    public static hero getHero(String heroName) {
+    public static Hero getHero(String heroName) {
         for (heroes hero : heroes.values()) {
             if (heroName.equalsIgnoreCase(hero.name())) {
                 return hero.ref.clone();
@@ -41,15 +41,16 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
         return null;
     }
 
-    public static ArrayList<hero> getPlayerHeroes(Player p) {
+    public static ArrayList<Hero> getPlayerHeroes(Player p) {
         if (!p.hasMetadata("Heroes")) {
-            p.setMetadata("Heroes", new FixedMetadataValue(Superheroes.plugin, new ArrayList<hero>()));
+            p.setMetadata("Heroes", new FixedMetadataValue(Superheroes.plugin, new ArrayList<Hero>()));
         }
-        return (ArrayList<hero>)p.getMetadata("Heroes").get(0).value();
+        ArrayList<Hero> heroes = (ArrayList<Hero>)p.getMetadata("Heroes").get(0).value();
+        return heroes;
     }
 
-    public static hero getPlayerHero(Player playerPointer, hero hType) {
-        for (hero o : getPlayerHeroes(playerPointer)) {
+    public static Hero getPlayerHero(Player playerPointer, Hero hType) {
+        for (Hero o : getPlayerHeroes(playerPointer)) {
             if (hType.getClass() == o.getClass())
                 return o;
         }
@@ -57,17 +58,17 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
     }
 
 
-        public static void removeHero(Player playerPointer, hero h) {
+        public static void removeHero(Player playerPointer, Hero h) {
         getPlayerHeroes(playerPointer).removeIf(o -> h.getClass() == o.getClass());
     }
-    public static boolean playerHasHero(Player playerPointer, hero h) {
+    public static boolean playerHasHero(Player playerPointer, Hero h) {
         for (Object o : getPlayerHeroes(playerPointer)) {
             if (h.getClass() == o.getClass())
                 return true;
         }
         return false;
     }
-    public static void addHeroToPlayer(Player playerPointer, hero h) {
+    public static void addHeroToPlayer(Player playerPointer, Hero h) {
         if (playerPointer.hasMetadata("Heroes"))
             if (!playerHasHero(playerPointer, h))
                 getPlayerHeroes(playerPointer).add(h);
@@ -102,7 +103,7 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
         }
         else if (args[0].equals("list")) {
             if (commandSender instanceof Player) {
-                for (hero h : getPlayerHeroes((Player)commandSender))
+                for (Hero h : getPlayerHeroes((Player)commandSender))
                     commandSender.sendMessage(h.toString());
                     return true;
             }
@@ -144,7 +145,7 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
         }
 
 
-        hero h = getHero(heroName);
+        Hero h = getHero(heroName);
 
         if (h == null) {
             if (activePlayer != null) {
@@ -188,7 +189,7 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
         if (event.getCurrentItem() != null) {
             if (event.getView().getTitle().equals("Select Hero") && Arrays.equals(event.getClickedInventory().getContents(), heroMenu().getContents())) {
                 event.setCancelled(true);
-                hero h = getHero(event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Superheroes.plugin, "Hero"), PersistentDataType.STRING));
+                Hero h = getHero(event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Superheroes.plugin, "Hero"), PersistentDataType.STRING));
                 if (h == null)
                     if (activePlayer != null) {
                         activePlayer.sendMessage("Superhero: Invalid Superhero name");
@@ -248,11 +249,11 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
         superman(new Superman(), 4, Material.ANCIENT_DEBRIS, ChatColor.RED + "Superman"),
         ;
 
-        hero ref;
+        Hero ref;
         int pos;
         Material stackType;
         String name;
-        heroes(hero reference, int position, Material stackType, String name) {
+        heroes(Hero reference, int position, Material stackType, String name) {
             this.ref = reference;
             this.pos = position;
             this.stackType = stackType;
