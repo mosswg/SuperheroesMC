@@ -34,19 +34,6 @@ public class SupermanPowers extends HeroPowers {
                 ((Superman)CommandSuperhero.getPlayerHero(p, new Superman())).setLazer(false);
             }
         }).runTaskLater(Superheroes.plugin, 5L);
-
-        Damageable d = ((Damageable) Hero.playerLookingAt(p));
-        if (d != null)
-            for (int i = 1; i < 5; i++) {
-                d.damage(2);
-                (new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        p.sendMessage("Damaged Entity");
-                        d.damage(1);
-                    }
-                }).runTaskLater(Superheroes.plugin, 1 + i);
-            }
     }
 
 
