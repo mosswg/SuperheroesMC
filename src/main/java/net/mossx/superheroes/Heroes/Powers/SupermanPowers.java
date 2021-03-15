@@ -1,5 +1,6 @@
 package net.mossx.superheroes.Heroes.Powers;
 
+import net.mossx.superheroes.CommandSuperhero;
 import net.mossx.superheroes.Heroes.Superman;
 import net.mossx.superheroes.Heroes.hero;
 import net.mossx.superheroes.Superheroes;
@@ -17,13 +18,23 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.function.Consumer;
 
-public class SupermanPowers {
+public class SupermanPowers extends HeroPowers {
+    public boolean lazer = false;
+
 
     public static void LazerEyes(Player p) {
         for (double j = 0; j < 200; j+=.5) {
             Location particleLocation = p.getEyeLocation().add(p.getEyeLocation().getDirection().multiply(j + 1));
             particleLocation.getWorld().spawnParticle(Particle.REDSTONE, particleLocation, 1, new Particle.DustOptions(Color.RED, 0.4F));
         }
+        ((Superman)CommandSuperhero.getPlayerHero(p, new Superman())).setLazer(true);
+        (new BukkitRunnable() {
+            @Override
+            public void run() {
+                ((Superman)CommandSuperhero.getPlayerHero(p, new Superman())).setLazer(false);
+            }
+        }).runTaskLater(Superheroes.plugin, 5L);
+
         Damageable d = ((Damageable) hero.playerLookingAt(p));
         if (d != null)
             for (int i = 1; i < 5; i++) {
@@ -40,10 +51,10 @@ public class SupermanPowers {
 
 
 
-    public enum inventory implements hero.inv {
-        Helmet(new ItemStack(Material.LEATHER_HELMET), hero.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_HELMET).getItemMeta(), Color.YELLOW), 0),
-        Leggings(new ItemStack(Material.LEATHER_LEGGINGS), hero.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_LEGGINGS).getItemMeta(), Color.fromRGB(44, 180, 2)), 1),
-        Boots(new ItemStack(Material.LEATHER_BOOTS), hero.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_BOOTS).getItemMeta(), Color.YELLOW), 2),
+    public enum inventory implements inv {
+        Helmet(new ItemStack(Material.LEATHER_HELMET), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_HELMET).getItemMeta(), Color.YELLOW), 0),
+        Leggings(new ItemStack(Material.LEATHER_LEGGINGS), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_LEGGINGS).getItemMeta(), Color.fromRGB(44, 180, 2)), 1),
+        Boots(new ItemStack(Material.LEATHER_BOOTS), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_BOOTS).getItemMeta(), Color.YELLOW), 2),
 
         LazerEyes(hero.createPower(Material.RED_DYE, "Lazer Eyes"), 8, SupermanPowers::LazerEyes)
         ;

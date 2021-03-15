@@ -1,5 +1,6 @@
 package net.mossx.superheroes.Heroes;
 
+import net.mossx.superheroes.Heroes.Powers.HeroPowers;
 import net.mossx.superheroes.Heroes.Powers.IronFistPowers;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
@@ -27,7 +28,7 @@ public class IronFist extends hero {
 
     @Override
     public void onEnable(Player p) {
-        p.openInventory(inv.getInv(27, IronFistPowers.inventory.values()));
+        p.openInventory(HeroPowers.inv.getInv(27, IronFistPowers.inventory.values()));
         for (effects e : effects.values()) {
             e.giveEffect(p);
         }

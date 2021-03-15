@@ -8,6 +8,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -24,7 +25,7 @@ import java.util.function.Consumer;
 
 import static net.mossx.superheroes.Heroes.hero.createPower;
 
-public class FlashPowers {
+public class FlashPowers extends HeroPowers {
     public static ArrayList<Player> wallrunningtime = new ArrayList<>();
     public static boolean freeze = false;
 
@@ -82,7 +83,7 @@ public class FlashPowers {
 
 
     public static void ThrowLightning(Player p) {
-        Player pl = playerLookingAt(p);
+        Entity pl = hero.playerLookingAt(p);
         if (pl == null) {
             RayTraceResult ray = p.rayTraceBlocks(1000, FluidCollisionMode.ALWAYS);
             if (ray != null) {
@@ -165,20 +166,12 @@ public class FlashPowers {
         p.setCooldown(p.getInventory().getItemInMainHand().getType(), 25 * 20);
     }
 
-    private static Player playerLookingAt(Player p) {
-        for (Player p2 : Bukkit.getOnlinePlayers()) {
-            if (p.hasLineOfSight(p2))
-                return p2;
-        }
-        return null;
-    }
 
-
-    public enum inventory implements hero.inv {
-        Helmet(new ItemStack(Material.LEATHER_HELMET), hero.inv.setUnbreakable(hero.inv.setColor((LeatherArmorMeta)(new ItemStack(Material.LEATHER_HELMET).getItemMeta()), Color.RED))),
-        Chestplate(new ItemStack(Material.LEATHER_CHESTPLATE), hero.inv.setUnbreakable(hero.inv.setColor(((LeatherArmorMeta)(new ItemStack(Material.LEATHER_CHESTPLATE).getItemMeta())), Color.RED))),
-        Leggings(new ItemStack(Material.LEATHER_LEGGINGS), hero.inv.setUnbreakable(hero.inv.setColor(((LeatherArmorMeta)(new ItemStack(Material.LEATHER_LEGGINGS).getItemMeta())), Color.RED))),
-        Boots(new ItemStack(Material.LEATHER_BOOTS), hero.inv.addEnchantment(hero.inv.setUnbreakable(hero.inv.setColor(((LeatherArmorMeta)(new ItemStack(Material.LEATHER_BOOTS).getItemMeta())), Color.RED)), Enchantment.ARROW_INFINITE, 1, true)),
+    public enum inventory implements inv {
+        Helmet(new ItemStack(Material.LEATHER_HELMET), HeroPowers.inv.setUnbreakable(HeroPowers.inv.setColor((LeatherArmorMeta)(new ItemStack(Material.LEATHER_HELMET).getItemMeta()), Color.RED))),
+        Chestplate(new ItemStack(Material.LEATHER_CHESTPLATE), HeroPowers.inv.setUnbreakable(HeroPowers.inv.setColor(((LeatherArmorMeta)(new ItemStack(Material.LEATHER_CHESTPLATE).getItemMeta())), Color.RED))),
+        Leggings(new ItemStack(Material.LEATHER_LEGGINGS), HeroPowers.inv.setUnbreakable(HeroPowers.inv.setColor(((LeatherArmorMeta)(new ItemStack(Material.LEATHER_LEGGINGS).getItemMeta())), Color.RED))),
+        Boots(new ItemStack(Material.LEATHER_BOOTS), HeroPowers.inv.addEnchantment(HeroPowers.inv.setUnbreakable(HeroPowers.inv.setColor(((LeatherArmorMeta)(new ItemStack(Material.LEATHER_BOOTS).getItemMeta())), Color.RED)), Enchantment.ARROW_INFINITE, 1, true)),
 
         Slot1(createPower(Material.BLUE_STAINED_GLASS_PANE, "HyperMetabolism", new hero.Tag(PersistentDataType.INTEGER, "Speed", 10)), 18, FlashPowers::HyperMetabolism),
         Slot2(createPower(Material.LIME_STAINED_GLASS_PANE, "Leap", new hero.Tag(PersistentDataType.INTEGER, "Speed", 15)), 19, FlashPowers::Leap),

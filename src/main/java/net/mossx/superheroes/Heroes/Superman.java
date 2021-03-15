@@ -1,12 +1,13 @@
 package net.mossx.superheroes.Heroes;
 
 import net.mossx.superheroes.CommandSuperhero;
-import net.mossx.superheroes.Heroes.Powers.FlashPowers;
+import net.mossx.superheroes.Heroes.Powers.HeroPowers;
 import net.mossx.superheroes.Heroes.Powers.SupermanPowers;
 import net.mossx.superheroes.Superheroes;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,10 +24,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 
-import static net.mossx.superheroes.Heroes.hero.inv.invKey;
+import static net.mossx.superheroes.Heroes.Powers.HeroPowers.inv.invKey;
 
-public class Superman extends hero{
+public class Superman extends hero {
     static final ArrayList<Player> flyingPlayers = new ArrayList<>();
+    SupermanPowers powers = new SupermanPowers();
     boolean singleShift = false;
 
     @Override
@@ -34,11 +36,16 @@ public class Superman extends hero{
         for (effects e : effects.values()) {
             e.giveEffect(p);
         }
+        if (((SupermanPowers)powers).lazer) {
+            Damageable d = ((Damageable) hero.playerLookingAt(p));
+            if (d != null)
+                d.damage(1);
+        }
     }
 
     @Override
     public void onEnable(Player p) {
-        p.openInventory(inv.getInv(27, SupermanPowers.inventory.values()));
+        p.openInventory(HeroPowers.inv.getInv(27, SupermanPowers.inventory.values()));
         for (effects e : effects.values()) {
             e.giveEffect(p);
         }
@@ -94,6 +101,10 @@ public class Superman extends hero{
 
 
         }
+    }
+
+    public void setLazer(boolean lazer) {
+        this.powers.lazer = lazer;
     }
 
     private enum effects {

@@ -1,5 +1,6 @@
 package net.mossx.superheroes.Heroes;
 
+import net.mossx.superheroes.Heroes.Powers.HeroPowers;
 import net.mossx.superheroes.Superheroes;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,7 +22,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Objects;
 
 import static net.mossx.superheroes.Heroes.Powers.FlashPowers.*;
-import static net.mossx.superheroes.Heroes.hero.inv.invKey;
+import static net.mossx.superheroes.Heroes.Powers.HeroPowers.inv.invKey;
 
 
 public class Flash extends hero implements Listener {
@@ -52,7 +53,9 @@ public class Flash extends hero implements Listener {
 
     @Override
     public void onEnable(Player p) {
-        p.openInventory(inv.getInv(27, FlashPowers.inventory.values()));
+        p.openInventory(HeroPowers.inv.getInv(27, FlashPowers.inventory.values()));
+        p.setMetadata("speed", new FixedMetadataValue(Superheroes.plugin, 0));
+        p.setMetadata("wallrun", new FixedMetadataValue(Superheroes.plugin, false));
         p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, 0, false, false));
         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 99999, 3, false, false));
         p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 99999, 0, false, false));
