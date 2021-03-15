@@ -8,7 +8,6 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,19 +18,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.function.Consumer;
 
 public class SupermanPowers extends HeroPowers {
-    public boolean lazer = false;
+    public boolean heatVision = false;
 
 
-    public static void LazerEyes(Player p) {
+    public static void HeatVision(Player p) {
         for (double j = 0; j < 200; j+=.5) {
             Location particleLocation = p.getEyeLocation().add(p.getEyeLocation().getDirection().multiply(j + 1));
             particleLocation.getWorld().spawnParticle(Particle.REDSTONE, particleLocation, 1, new Particle.DustOptions(Color.RED, 0.4F));
         }
-        ((Superman)CommandSuperhero.getPlayerHero(p, new Superman())).setLazer(true);
+        ((Superman)CommandSuperhero.getPlayerHero(p, new Superman())).setHeatVision(true);
         (new BukkitRunnable() {
             @Override
             public void run() {
-                ((Superman)CommandSuperhero.getPlayerHero(p, new Superman())).setLazer(false);
+                ((Superman)CommandSuperhero.getPlayerHero(p, new Superman())).setHeatVision(false);
             }
         }).runTaskLater(Superheroes.plugin, 5L);
     }
@@ -43,7 +42,7 @@ public class SupermanPowers extends HeroPowers {
         Leggings(new ItemStack(Material.LEATHER_LEGGINGS), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_LEGGINGS).getItemMeta(), Color.fromRGB(44, 180, 2)), 1),
         Boots(new ItemStack(Material.LEATHER_BOOTS), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_BOOTS).getItemMeta(), Color.YELLOW), 2),
 
-        LazerEyes(Hero.createPower(Material.RED_DYE, "Lazer Eyes"), 8, SupermanPowers::LazerEyes)
+        HeatVision(Hero.createPower(Material.RED_DYE, "Heat Vision"), 8, SupermanPowers::HeatVision)
         ;
 
         ItemStack stack; int position; Consumer<Player> run;
