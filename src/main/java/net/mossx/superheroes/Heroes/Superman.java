@@ -12,10 +12,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
@@ -36,10 +38,14 @@ public class Superman extends Hero {
         for (effects e : effects.values()) {
             e.giveEffect(p);
         }
-        if (powers.lazer) {
+        if (powers.heatVision) {
             Damageable d = ((Damageable)Hero.playerLookingAt(p));
             if (d != null) {
-                d.setHealth(d.getHealth()-1);
+                d.damage(10);
+                if (Hero.playerLookingAt(p) instanceof Player) {
+                    (Hero.playerLookingAt(p)).setMetadata("DeathMessage", new FixedMetadataValue(Superheroes.plugin, ((Player) Hero.playerLookingAt(p)).getDisplayName() + " Was Shot by " + p.getDisplayName() + "'s Heat Vision"));
+                }
+                d.setLastDamageCause(new EntityDamageEvent(p, EntityDamageEvent.DamageCause.DRYOUT, 10));
             }
         }
     }
@@ -104,8 +110,8 @@ public class Superman extends Hero {
         }
     }
 
-    public void setLazer(boolean lazer) {
-        this.powers.lazer = lazer;
+    public void setHeatVision(boolean heatVision) {
+        this.powers.heatVision = heatVision;
     }
 
     private enum effects {
