@@ -21,6 +21,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.BoundingBox;
+import org.bukkit.util.RayTraceResult;
 
 import java.util.function.Predicate;
 
@@ -54,7 +55,7 @@ public abstract class hero implements Cloneable, Listener {
     }
 
     public static Entity playerLookingAt(Player p) {
-        return p.getWorld().rayTraceEntities(p.getEyeLocation(), p.getEyeLocation().getDirection(), 100, new Predicate<Entity>() {
+        RayTraceResult ray = p.getWorld().rayTraceEntities(p.getEyeLocation(), p.getEyeLocation().getDirection(), 100, new Predicate<Entity>() {
             @Override
             public boolean test(Entity entity) {
                 if (entity instanceof Player) {
@@ -62,7 +63,8 @@ public abstract class hero implements Cloneable, Listener {
                 }
                 return true;
             }
-        }).getHitEntity();
+        });
+        return ray != null ? ray.getHitEntity() : null;
     }
 
 
