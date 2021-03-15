@@ -62,7 +62,7 @@ public class Superman extends hero{
             if (e.getItem() != null) {
                 PersistentDataContainer pdc = e.getItem().getItemMeta().getPersistentDataContainer();
                 if (pdc.has(invKey, PersistentDataType.DOUBLE) && !e.getPlayer().hasCooldown(e.getItem().getType()))
-                    FlashPowers.inventory.getByMaterial(e.getMaterial()).run.accept(e.getPlayer());
+                    SupermanPowers.inventory.getByMaterial(e.getMaterial()).run(e.getPlayer());
             }
         }
     }
