@@ -52,11 +52,7 @@ public abstract class hero implements Cloneable, Listener {
     }
 
     public static Entity playerLookingAt(Player p) {
-        for (Entity ent : p.getNearbyEntities(100, 100, 100)) {
-            if (p.hasLineOfSight(ent))
-                return ent;
-        }
-        return null;
+        return p.getWorld().rayTraceEntities(p.getEyeLocation(), p.getEyeLocation().getDirection(), 100).getHitEntity();
     }
 
 
