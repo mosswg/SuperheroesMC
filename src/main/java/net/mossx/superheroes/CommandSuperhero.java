@@ -2,6 +2,7 @@ package net.mossx.superheroes;
 
 import net.mossx.superheroes.Heroes.Flash;
 import net.mossx.superheroes.Heroes.IronFist;
+import net.mossx.superheroes.Heroes.Powers.HeroPowers;
 import net.mossx.superheroes.Heroes.Superman;
 import net.mossx.superheroes.Heroes.hero;
 import org.bukkit.Bukkit;
@@ -45,14 +46,19 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
             p.setMetadata("Heroes", new FixedMetadataValue(Superheroes.plugin, new ArrayList<hero>()));
         }
         return (ArrayList<hero>)p.getMetadata("Heroes").get(0).value();
-        //return playerHeroes.get(p.getUniqueId());
     }
 
-    public static void removeHero(Player playerPointer, hero h) {
-        for (Object o : getPlayerHeroes(playerPointer)) {
-            if (h.getClass() == o.getClass())
-                getPlayerHeroes(playerPointer).remove(o);
+    public static hero getPlayerHero(Player playerPointer, hero hType) {
+        for (hero o : getPlayerHeroes(playerPointer)) {
+            if (hType.getClass() == o.getClass())
+                return o;
         }
+        return null;
+    }
+
+
+        public static void removeHero(Player playerPointer, hero h) {
+        getPlayerHeroes(playerPointer).removeIf(o -> h.getClass() == o.getClass());
     }
     public static boolean playerHasHero(Player playerPointer, hero h) {
         for (Object o : getPlayerHeroes(playerPointer)) {
@@ -258,7 +264,7 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
             ItemStack item = new ItemStack(stackType);
             ItemMeta im = item.getItemMeta();
             im.setDisplayName(name);
-            hero.inv.addTag(im, "Hero", PersistentDataType.STRING, this.name());
+            HeroPowers.inv.addTag(im, "Hero", PersistentDataType.STRING, this.name());
             item.setItemMeta(im);
             return item;
         }
