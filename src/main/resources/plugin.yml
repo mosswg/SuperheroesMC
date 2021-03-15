@@ -11,9 +11,6 @@ commands:
   Superhero:
     description: WIP
     usage: /<command> <player or hero> <hero>
-  smfly:
-    description: Superman Style Flight
-    usage: /<command>
   Potions:
     description: Display Active Potion Effects With Amplitude
     usage: /<command>
