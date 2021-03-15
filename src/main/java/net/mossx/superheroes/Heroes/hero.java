@@ -58,9 +58,9 @@ public abstract class hero implements Cloneable, Listener {
             @Override
             public boolean test(Entity entity) {
                 if (entity instanceof Player) {
-                    return !((Player)entity).getUniqueId().equals(p.getUniqueId());
+                    return !(entity.getUniqueId().equals(p.getUniqueId()));
                 }
-                return false;
+                return true;
             }
         }).getHitEntity();
     }
