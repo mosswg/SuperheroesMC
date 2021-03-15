@@ -48,14 +48,14 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
         //return playerHeroes.get(p.getUniqueId());
     }
 
-    public static void removeHero(Player playerName, hero h) {
-        for (Object o : getPlayerHeroes(playerName)) {
+    public static void removeHero(Player playerPointer, hero h) {
+        for (Object o : getPlayerHeroes(playerPointer)) {
             if (h.getClass() == o.getClass())
-                playerName.getMetadata("Heroes").remove(o);
+                getPlayerHeroes(playerPointer).remove(o);
         }
     }
-    public static boolean playerHasHero(Player playerName, hero h) {
-        for (Object o : getPlayerHeroes(playerName)) {
+    public static boolean playerHasHero(Player playerPointer, hero h) {
+        for (Object o : getPlayerHeroes(playerPointer)) {
             if (h.getClass() == o.getClass())
                 return true;
         }
@@ -64,7 +64,7 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
     public static void addHeroToPlayer(Player playerPointer, hero h) {
         if (playerPointer.hasMetadata("Heroes"))
             if (!playerHasHero(playerPointer, h))
-                ((ArrayList<hero>)(playerPointer.getMetadata("Heroes").get(0).value())).add(h);
+                getPlayerHeroes(playerPointer).add(h);
         else {
             playerPointer.setMetadata("Heroes", new FixedMetadataValue(Superheroes.plugin, new ArrayList<>(Collections.singletonList(h))));
         }
