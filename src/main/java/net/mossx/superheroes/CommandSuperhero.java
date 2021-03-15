@@ -28,7 +28,6 @@ import java.util.*;
 
 public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener {
     public static Player activePlayer;
-    //public static HashMap<UUID, ArrayList<hero>> playerHeroes = new HashMap<>();
     private boolean enable;
     private boolean setEnabled;
 
@@ -42,6 +41,9 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
     }
 
     public static ArrayList<hero> getPlayerHeroes(Player p) {
+        if (!p.hasMetadata("Heroes")) {
+            p.setMetadata("Heroes", new FixedMetadataValue(Superheroes.plugin, new ArrayList<hero>()));
+        }
         return (ArrayList<hero>)p.getMetadata("Heroes").get(0).value();
         //return playerHeroes.get(p.getUniqueId());
     }
