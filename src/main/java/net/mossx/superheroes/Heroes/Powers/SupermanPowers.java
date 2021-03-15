@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 public class SupermanPowers {
 
     public static void LazerEyes(Player p) {
-        for (int j = 0; j < 100; j++) {
+        for (double j = 0; j < 200; j+=.5) {
             Location particleLocation = p.getEyeLocation().add(p.getEyeLocation().getDirection().multiply(j + 1));
             particleLocation.getWorld().spawnParticle(Particle.REDSTONE, particleLocation, 1, new Particle.DustOptions(Color.RED, 0.4F));
         }
