@@ -43,6 +43,16 @@ public class SupermanPowers {
             this.stack = stack; this.position = position;
         }
 
+        public static inventory getByMaterial(Material material) {
+                for (inventory i : inventory.values()) {
+                    if (i.stack.getType() == material) {
+                        return i;
+                    }
+                }
+                System.out.println("No Item Of Type " + material + " Was Found");
+                return inventory.values()[0];
+            }
+
 
         @Override
         public String getName() {
@@ -52,6 +62,10 @@ public class SupermanPowers {
         @Override
         public ItemStack getStack() {
             return stack;
+        }
+
+        public void run(Player p) {
+            this.run.accept(p);
         }
 
         @Override
