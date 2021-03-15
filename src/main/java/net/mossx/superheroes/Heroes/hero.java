@@ -54,12 +54,7 @@ public abstract class hero implements Cloneable, Listener {
     }
 
     public static Entity playerLookingAt(Player p) {
-        return p.getWorld().rayTraceEntities(p.getLocation().add(p.getEyeLocation().getDirection().multiply(1.5)), p.getEyeLocation().getDirection(), 100, new Predicate<Entity>() {
-            @Override
-            public boolean test(Entity entity) {
-                return entity.equals(p);
-            }
-        }).getHitEntity();
+        return p.getWorld().rayTraceEntities(p.getEyeLocation().add(p.getEyeLocation().getDirection()), p.getEyeLocation().getDirection(), 100).getHitEntity();
     }
 
 
