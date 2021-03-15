@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
@@ -27,7 +28,7 @@ import java.util.*;
 
 public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener {
     public static Player activePlayer;
-    public static HashMap<UUID, ArrayList<hero>> playerHeroes = new HashMap<>();
+    //public static HashMap<UUID, ArrayList<hero>> playerHeroes = new HashMap<>();
     private boolean enable;
     private boolean setEnabled;
 
@@ -41,28 +42,29 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
     }
 
     public static ArrayList<hero> getPlayerHeroes(Player p) {
-        return playerHeroes.get(p.getUniqueId());
+        return (ArrayList<hero>)p.getMetadata("Heroes").get(0).value();
+        //return playerHeroes.get(p.getUniqueId());
     }
 
     public static void removeHero(Player playerName, hero h) {
-        for (Object o : playerHeroes.get(playerName.getUniqueId()).toArray()) {
+        for (Object o : getPlayerHeroes(playerName)) {
             if (h.getClass() == o.getClass())
-                playerHeroes.get(playerName.getUniqueId()).remove(o);
+                playerName.getMetadata("Heroes").remove(o);
         }
     }
     public static boolean playerHasHero(Player playerName, hero h) {
-        for (Object o : playerHeroes.get(playerName.getUniqueId()).toArray()) {
+        for (Object o : getPlayerHeroes(playerName)) {
             if (h.getClass() == o.getClass())
                 return true;
         }
         return false;
     }
     public static void addHeroToPlayer(Player playerPointer, hero h) {
-        if (playerHeroes.containsKey(playerPointer.getUniqueId()))
+        if (playerPointer.hasMetadata("Heroes"))
             if (!playerHasHero(playerPointer, h))
-                playerHeroes.get(playerPointer.getUniqueId()).add(h);
+                ((ArrayList<hero>)(playerPointer.getMetadata("Heroes").get(0).value())).add(h);
         else {
-            playerHeroes.put(playerPointer.getUniqueId(), new ArrayList<>(Collections.singletonList(h)));
+            playerPointer.setMetadata("Heroes", new FixedMetadataValue(Superheroes.plugin, new ArrayList<>(Collections.singletonList(h))));
         }
     }
 
@@ -91,10 +93,11 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
             setEnabled = true;
         }
         else if (args[0].equals("list")) {
-            while (playerHeroes.get(((Player)commandSender).getUniqueId()).iterator().hasNext()) {
-                commandSender.sendMessage(playerHeroes.get(((Player)commandSender).getUniqueId()).iterator().next().toString());
+            if (commandSender instanceof Player) {
+                for (hero h : getPlayerHeroes((Player)commandSender))
+                    commandSender.sendMessage(h.toString());
+                    return true;
             }
-            return true;
         }
 
 
@@ -174,29 +177,29 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getView().getTitle().equals("Select Hero") && Arrays.equals(event.getClickedInventory().getContents(), heroMenu().getContents())) {
-            event.setCancelled(true);
-            hero h = getHero(event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Superheroes.plugin, "Hero"), PersistentDataType.STRING));
-            if (h == null)
-                if (activePlayer != null) {
-                    activePlayer.sendMessage("Superhero: Invalid Superhero name");
-                }
+        if (event.getCurrentItem() != null) {
+            if (event.getView().getTitle().equals("Select Hero") && Arrays.equals(event.getClickedInventory().getContents(), heroMenu().getContents())) {
+                event.setCancelled(true);
+                hero h = getHero(event.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Superheroes.plugin, "Hero"), PersistentDataType.STRING));
+                if (h == null)
+                    if (activePlayer != null) {
+                        activePlayer.sendMessage("Superhero: Invalid Superhero name");
+                    } else {
+                        System.out.println("Superhero: Invalid Superhero name");
+                    }
                 else {
-                    System.out.println("Superhero: Invalid Superhero name");
-                }
-            else {
-                if (!setEnabled)
-                    enable = !playerHasHero((Player)event.getWhoClicked(), h);
-                event.getWhoClicked().closeInventory();
-                if (!enable) {
-                    h.onDisable(activePlayer);
-                    removeHero(activePlayer, h);
-                    activePlayer.sendMessage("Superhero: Removed " + h.getName());
-                }
-                else {
-                    h.onEnable(activePlayer);
-                    addHeroToPlayer(activePlayer, h);
-                    activePlayer.sendMessage("Superhero: Added " + h.getName());
+                    if (!setEnabled)
+                        enable = !playerHasHero((Player) event.getWhoClicked(), h);
+                    event.getWhoClicked().closeInventory();
+                    if (!enable) {
+                        h.onDisable(activePlayer);
+                        removeHero(activePlayer, h);
+                        activePlayer.sendMessage("Superhero: Removed " + h.getName());
+                    } else {
+                        h.onEnable(activePlayer);
+                        addHeroToPlayer(activePlayer, h);
+                        activePlayer.sendMessage("Superhero: Added " + h.getName());
+                    }
                 }
             }
         }
@@ -229,9 +232,7 @@ public class CommandSuperhero implements CommandExecutor, TabCompleter, Listener
     }
 
     @EventHandler
-    public void onPlayerQuitEvent(PlayerQuitEvent event) {
-        playerHeroes.remove(event.getPlayer().getUniqueId());
-    }
+    public void onPlayerQuitEvent(PlayerQuitEvent event) {}
 
     public enum heroes{
         flash(new Flash(), 0, Material.HONEYCOMB, ChatColor.DARK_RED + "Flash"),
