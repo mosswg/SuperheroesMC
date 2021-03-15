@@ -2,6 +2,7 @@ package net.mossx.superheroes.Heroes.Powers;
 
 import net.mossx.superheroes.Heroes.Superman;
 import net.mossx.superheroes.Heroes.hero;
+import net.mossx.superheroes.Superheroes;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.function.Consumer;
 
@@ -24,7 +26,14 @@ public class SupermanPowers {
         }
         Damageable d = ((Damageable) hero.playerLookingAt(p));
         if (d != null)
-            d.damage(2.5);
+            for (int i = 0; i < 5; i++) {
+                (new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        d.damage(1);
+                    }
+                }).runTaskLater(Superheroes.plugin, i);
+            }
     }
 
 
