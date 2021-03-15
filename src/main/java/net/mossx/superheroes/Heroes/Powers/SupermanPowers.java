@@ -46,7 +46,7 @@ public class SupermanPowers extends HeroPowers {
             Location particleLocation = p.getEyeLocation().add(p.getEyeLocation().getDirection().multiply(j + 1));
             particleLocation.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, particleLocation, 6);
         }
-        RayTraceResult ray = p.getWorld().rayTraceEntities(p.getEyeLocation(), p.getEyeLocation().getDirection(), 100, 4, new Predicate<Entity>() {
+        RayTraceResult ray = p.getWorld().rayTraceEntities(p.getEyeLocation(), p.getEyeLocation().getDirection(), 4, 4, new Predicate<Entity>() {
             @Override
             public boolean test(Entity entity) {
                 if (entity instanceof Player) {
@@ -66,10 +66,10 @@ public class SupermanPowers extends HeroPowers {
 
 
     public enum inventory implements inv {
-        Helmet(new ItemStack(Material.LEATHER_HELMET), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_HELMET).getItemMeta(), Color.BLUE), 0),
-        Chestplate(new ItemStack(Material.LEATHER_CHESTPLATE), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_CHESTPLATE).getItemMeta(), Color.BLUE), 1),
-        Leggings(new ItemStack(Material.LEATHER_LEGGINGS), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_LEGGINGS).getItemMeta(), Color.RED), 2),
-        Boots(new ItemStack(Material.LEATHER_BOOTS), HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_BOOTS).getItemMeta(), Color.RED), 3),
+        Helmet(new ItemStack(Material.LEATHER_HELMET), inv.setUnbreakable(HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_HELMET).getItemMeta(), Color.BLUE)), 0),
+        Chestplate(new ItemStack(Material.LEATHER_CHESTPLATE), inv.setUnbreakable(HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_CHESTPLATE).getItemMeta(), Color.BLUE)), 1),
+        Leggings(new ItemStack(Material.LEATHER_LEGGINGS), inv.setUnbreakable(HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_LEGGINGS).getItemMeta(), Color.RED)), 2),
+        Boots(new ItemStack(Material.LEATHER_BOOTS), inv.setUnbreakable(HeroPowers.inv.setColor((LeatherArmorMeta)new ItemStack(Material.LEATHER_BOOTS).getItemMeta(), Color.RED)), 3),
 
         FrostBreath(Hero.createPower(Material.BLUE_ICE, "Frost Breath"), 7, SupermanPowers::FrostBreath),
         HeatVision(Hero.createPower(Material.RED_DYE, "Heat Vision"), 8, SupermanPowers::HeatVision),
