@@ -1,5 +1,6 @@
 package net.mossx.superheroes.Heroes.Powers;
 
+import net.mossx.superheroes.Heroes.Superman;
 import net.mossx.superheroes.Heroes.hero;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -15,14 +16,15 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.function.Consumer;
 
 public class SupermanPowers {
+
     public static void LazerEyes(Player p) {
         for (int j = 0; j < 100; j++) {
             Location particleLocation = p.getEyeLocation().add(p.getEyeLocation().getDirection().multiply(j + 1));
             particleLocation.getWorld().spawnParticle(Particle.REDSTONE, particleLocation, 1, new Particle.DustOptions(Color.RED, 0.4F));
         }
-        Damageable d = ((Damageable)hero.playerLookingAt(p));
+        Damageable d = ((Damageable) hero.playerLookingAt(p));
         if (d != null)
-            d.damage(.5);
+            d.damage(2.5);
     }
 
 
