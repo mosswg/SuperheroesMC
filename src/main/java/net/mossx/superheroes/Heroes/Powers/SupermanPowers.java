@@ -26,13 +26,15 @@ public class SupermanPowers {
         }
         Damageable d = ((Damageable) hero.playerLookingAt(p));
         if (d != null)
-            for (int i = 0; i < 5; i++) {
+            for (int i = 1; i < 5; i++) {
+                d.damage(2);
                 (new BukkitRunnable() {
                     @Override
                     public void run() {
+                        p.sendMessage("Damaged Entity");
                         d.damage(1);
                     }
-                }).runTaskLater(Superheroes.plugin, i);
+                }).runTaskLater(Superheroes.plugin, 1 + i);
             }
     }
 
