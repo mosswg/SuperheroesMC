@@ -39,8 +39,7 @@ public class Superman extends Hero {
         if (powers.lazer) {
             Damageable d = ((Damageable)Hero.playerLookingAt(p));
             if (d != null) {
-                d.damage(2.5);
-                p.sendMessage("Damaged Entity");
+                d.setHealth(d.getHealth()-1);
             }
         }
     }
