@@ -44,7 +44,7 @@ public class SupermanPowers extends HeroPowers {
     public static void FrostBreath(Player p) {
         for (double j = 0; j < 6; j+=.5) {
             Location particleLocation = p.getEyeLocation().add(p.getEyeLocation().getDirection().multiply(j + 1));
-            particleLocation.getWorld().spawnParticle(Particle.SNOWBALL, particleLocation, 1, new Particle.DustOptions(Color.RED, 0.4F));
+            particleLocation.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, particleLocation, 6);
         }
         RayTraceResult ray = p.getWorld().rayTraceEntities(p.getEyeLocation(), p.getEyeLocation().getDirection(), 100, 4, new Predicate<Entity>() {
             @Override
