@@ -5,6 +5,7 @@ Plugins for a Marvel and DC Superhero based Minecraft server
 <ul>
   <li> Flash </li>
   <li> Iron Fist </li>
+  <li> Superman </li>
   </ul>
 
 
