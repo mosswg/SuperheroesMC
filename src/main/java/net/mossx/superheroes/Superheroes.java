@@ -38,12 +38,10 @@ public final class Superheroes extends JavaPlugin implements Listener {
         BukkitScheduler scheduler = getServer().getScheduler();
         scheduler.scheduleSyncRepeatingTask(this, () -> {
             Collection<? extends Player> players = Bukkit.getOnlinePlayers();
-            int i = 0;
             for (Player p : players) {
-                for (hero h : CommandSuperhero.getPlayerHeroes(p)) {
-                    h.tick(p);
+                for (Object h : CommandSuperhero.getPlayerHeroes(p)) {
+                    ((hero)h).tick(p);
                 }
-                i++;
             }
         }, 0L, 1L);
         plugin = this;
@@ -52,8 +50,8 @@ public final class Superheroes extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEvent e) {
         for (Player p : Bukkit.getOnlinePlayers()) {
-            for (hero h : CommandSuperhero.getPlayerHeroes(p)) {
-                    h.playerInteractEvent(e);
+            for (Object h : CommandSuperhero.getPlayerHeroes(p)) {
+                ((hero)h).playerInteractEvent(e);
                 }
             }
         }
@@ -74,8 +72,8 @@ public final class Superheroes extends JavaPlugin implements Listener {
             return;
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
-            for (hero h : CommandSuperhero.getPlayerHeroes(p)) {
-                h.playerMoveEvent(event);
+            for (Object h : CommandSuperhero.getPlayerHeroes(p)) {
+                ((hero)h).playerMoveEvent(event);
             }
         }
     }
@@ -83,8 +81,8 @@ public final class Superheroes extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerSneak(PlayerToggleSneakEvent e) {
         for (Player p : Bukkit.getOnlinePlayers()) {
-            for (hero h : CommandSuperhero.getPlayerHeroes(p)) {
-                h.playerSneakEvent(e);
+            for (Object h : CommandSuperhero.getPlayerHeroes(p)) {
+                ((hero)h).playerSneakEvent(e);
             }
         }
     }
@@ -100,8 +98,8 @@ public final class Superheroes extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         for (Player p : Bukkit.getOnlinePlayers()) {
-            for (hero h : CommandSuperhero.getPlayerHeroes(p)) {
-                    h.onDisable(p);
+            for (Object h : CommandSuperhero.getPlayerHeroes(p)) {
+                ((hero)h).onDisable(p);
                 }
             }
         }
