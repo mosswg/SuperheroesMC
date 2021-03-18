@@ -1,11 +1,8 @@
 package net.mossx.superheroes.Heroes;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import net.mossx.superheroes.Superheroes;
 import org.bukkit.Bukkit;
@@ -30,13 +27,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class Spiderman extends Hero{
-        private Set<ArrowVelocity> arrows = new HashSet<>();
+        private final Set<ArrowVelocity> arrows = new HashSet<>();
         private static final double gravityConstant = 0.1;
 
     @Override
     public void tick(Player p) {
         if (hasSwingDir(p)) {
-            Vector vel = getVelocity(getSwingPos(p), p);
+            if (p.getLocation().getWorld() != getSwingPos(p).getWorld()) {
+                removeSwingPos(p);
+                removeSwingDir(p);
+            }
+            Vector vel = getVelocity(p);
             if (vel != null)
                 p.setVelocity(vel);
             else
@@ -84,16 +85,16 @@ public class Spiderman extends Hero{
         @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
         public void onGrapple(PlayerGrappleEvent event) {
             Player player = event.getPlayer();
+            player.sendMessage("Grapple Event");
             Entity entity = event.getPulledEntity();
             Location location = event.getPullLocation();
-            if (player.equals(entity) && hasVel(player)) {
+            if (player.equals(entity) && hasSwingDir(player)) {
                 player.setFallDistance(-35.0F);
             } else {
                 setSwingDir(player, player.getEyeLocation().getDirection());
                 setSwingPos(player, location);
             }
             location.getWorld().playSound(location, Sound.ENTITY_MAGMA_CUBE_JUMP, 10.0F, 1.0F);
-            setCooldown(player, 700L);
             player.setFallDistance(0.0F);
         }
 
@@ -109,6 +110,7 @@ public class Spiderman extends Hero{
                 Arrow arrow = (Arrow)e.getEntity();
                 this.arrows.remove(arrow);
                 if (arrow.getShooter() instanceof Player) {
+                    ((Player) arrow.getShooter()).sendMessage("Arrow Landed at " + arrow.getLocation());
                     Player p = (Player)arrow.getShooter();
                     if (p.getInventory().getItemInMainHand().getType() != Material.BOW)
                         arrow.remove();
@@ -128,7 +130,7 @@ public class Spiderman extends Hero{
                             break;
                         }
                     }
-                    if (!onCooldown(p) && !p.getInventory().getItemInMainHand().getType().equals(Material.BOW))
+                    if (!hasSwingDir(p) && !p.getInventory().getItemInMainHand().getType().equals(Material.BOW))
                         if (found == null) {
                             Location loc = arrow.getLocation();
                             for (Entity ent : arrow.getNearbyEntities(1.5D, 1.0D, 1.5D)) {
@@ -138,12 +140,12 @@ public class Spiderman extends Hero{
                                     return;
                                 }
                             }
-                            PlayerGrappleEvent event = new PlayerGrappleEvent(p, (Entity)p, loc);
+                            PlayerGrappleEvent event = new PlayerGrappleEvent(p, p, loc);
                             Bukkit.getServer().getPluginManager().callEvent(event);
                         } else if (found != null) {
                             if (found instanceof Player) {
                                 Player hooked = (Player)found;
-                                PlayerGrappleEvent event = new PlayerGrappleEvent(p, (Entity)hooked, p.getLocation());
+                                PlayerGrappleEvent event = new PlayerGrappleEvent(p, hooked, p.getLocation());
                                 Bukkit.getServer().getPluginManager().callEvent(event);
                             } else {
                                 PlayerGrappleEvent event = new PlayerGrappleEvent(p, found, p.getLocation());
@@ -157,15 +159,13 @@ public class Spiderman extends Hero{
         @Override
         public void playerInteractEvent(PlayerInteractEvent e) {
             final Player p = e.getPlayer();
-
-
-            if (!hasSwingDir(p) && !hasVel(p)) {
+            if (!hasSwingDir(p) && !hasSwingPos(p)) {
                 Action a = e.getAction();
                 if ((a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) && e.getPlayer().getInventory().getItemInMainHand().getType() == Material.WHITE_DYE) {
                     Vector direction = p.getEyeLocation().getDirection().multiply(4);
                     Arrow arrow = p.getWorld().spawn(e.getPlayer().getEyeLocation().add(direction.multiply(1.5D)), Arrow.class);
                     this.arrows.add(new ArrowVelocity(arrow));
-                    arrow.setMetadata("arrow", new FixedMetadataValue(Superheroes.plugin, Boolean.valueOf(true)));
+                    arrow.setMetadata("arrow", new FixedMetadataValue(Superheroes.plugin, true));
                     arrow.setVelocity(direction);
                     arrow.setShooter(p);
                     final Bat bat = p.getWorld().spawn(p.getEyeLocation(), Bat.class);
@@ -195,38 +195,6 @@ public class Spiderman extends Hero{
                     }
                 }
             }
-        }
-
-//        private void pullEntityToLocation(Entity entity, Location location) {
-//            Location entityLoc = entity.getLocation();
-//            entityLoc.setY(entityLoc.getY() + 0.5D);
-//            entity.teleport(entityLoc);
-//            double g = -0.08D;
-//            double d = location.distance(entityLoc);
-//            double t = d;
-//            double v_x = (1.0D + 0.07D * t) * (location.getX() - entityLoc.getX()) / t;
-//            double v_y = (1.0D + 0.03D * t) * (location.getY() - entityLoc.getY()) / t + 0.5D * g * t;
-//            double v_z = (1.0D + 0.07D * t) * (location.getZ() - entityLoc.getZ()) / t;
-//            Vector v = entity.getVelocity();
-//            v.setX(v_x);
-//            v.setY(v_y);
-//            v.setZ(v_z);
-//            entity.setVelocity(v);
-//        }
-
-
-        private static Vector getVel(Player player) {
-            return (Vector)player.getMetadata("vel").get(0).value();
-        }
-
-        private static boolean hasVel(Player player) {
-            return player.hasMetadata("vel");
-        }
-        private static void setVel(Player player, Vector Vect) {
-            player.setMetadata("vel", new FixedMetadataValue(Superheroes.plugin, Vect));
-        }
-        private static void removeVel(Player player) {
-            player.removeMetadata("vel", Superheroes.plugin);
         }
         private static Vector getSwingDir(Player player) {
             return (Vector)player.getMetadata("swingDirection").get(0).value();
@@ -267,33 +235,25 @@ public class Spiderman extends Hero{
         return Math.acos((Math.pow(a,2) - Math.pow(b, 2) - Math.pow(c, 2))/(2*b*c));
         }
 
-        private static Vector getVelocity(Location swingLocation, Player p) {
-        if (hasSwingDir(p))
+        private static Vector getVelocity(Player p) {
+        if (!hasSwingDir(p) || !hasSwingPos(p))
             return null;
         Vector dir = getSwingDir(p);
+        Location swingLocation = getSwingPos(p);
         if (dir == null)
             return null;
         double l = swingLocation.distance(p.getLocation());
         double angle = getAngle(swingLocation, p.getLocation());
 
-        double force = (-gravityConstant * Math.sin(angle))/l;
+        angle = (-gravityConstant * Math.sin(angle))/l;
 
-        double x = l * Math.sin(angle) + swingLocation.getX();
-        double y = l * Math.cos(angle) + swingLocation.getY();
+        double x = Math.sin(angle);
+        double y = Math.cos(angle);
 
+        p.sendMessage(x + ", " + y);
         return new Vector(dir.getX()*(1+x), y, dir.getZ()*(1+x));
         }
 
-
-        private static Map<UUID, Long> cooldowns = new HashMap<>();
-
-        private boolean onCooldown(Player player) {
-            return (System.currentTimeMillis() < cooldowns.getOrDefault(player.getUniqueId(), 0L));
-        }
-
-        private void setCooldown(Player player, long time) {
-            cooldowns.put(player.getUniqueId(), Long.valueOf(System.currentTimeMillis() + time));
-        }
 
 
 
@@ -324,13 +284,13 @@ public class Spiderman extends Hero{
     public static class PlayerGrappleEvent extends Event implements Cancellable {
         private static final HandlerList handlers = new HandlerList();
 
-        private Player player;
+        private final Player player;
 
-        private Entity entity;
+        private final Entity entity;
 
-        private Location pullLocation;
+        private final Location pullLocation;
 
-        private ItemStack hookItem;
+        private final ItemStack hookItem;
 
         private boolean cancelled = false;
 
