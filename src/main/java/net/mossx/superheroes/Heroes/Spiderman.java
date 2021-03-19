@@ -28,7 +28,7 @@ import org.bukkit.util.Vector;
 
 public class Spiderman extends Hero{
         private final Set<ArrowVelocity> arrows = new HashSet<>();
-        private static final double gravityConstant = 0.1;
+        private static final double gravityConstant = 100;
 
     @Override
     public void tick(Player p) {
@@ -222,17 +222,13 @@ public class Spiderman extends Hero{
         player.removeMetadata("swingPosition", Superheroes.plugin);
     }
 
-        private static double distToXZ(Vector a, Vector b) {
-        Vector comp = new Vector(b.getX(), a.getY(), b.getZ());
-
-        return a.distance(comp);
-        }
 
         private static double getAngle(Location start, Location end) {
-        double a = distToXZ(start.toVector(), end.toVector());
+        Vector comp = new Vector(end.getX(), start.getY(), end.getZ());
+        double a = start.toVector().distance(comp);
         double b = start.distance(end);
-        double c = Math.abs(start.getY() - end.getY());
-        return Math.acos((Math.pow(a,2) - Math.pow(b, 2) - Math.pow(c, 2))/(2*b*c));
+        double c = end.getY() - start.getY();
+        return Math.acos((Math.pow(a,2) - Math.pow(b, 2) - Math.pow(c, 2))/(-2*b*c));
         }
 
         private static Vector getVelocity(Player p) {
@@ -240,17 +236,19 @@ public class Spiderman extends Hero{
             return null;
         Vector dir = getSwingDir(p);
         Location swingLocation = getSwingPos(p);
-        if (dir == null)
+        if (dir == null || swingLocation == null)
             return null;
         double l = swingLocation.distance(p.getLocation());
         double angle = getAngle(swingLocation, p.getLocation());
 
+        p.sendMessage("Angle: " + Math.toDegrees(angle));
+
         angle = (-gravityConstant * Math.sin(angle))/l;
 
-        double x = Math.sin(angle);
-        double y = Math.cos(angle);
+        double x = l * Math.sin(angle);
+        double y = l * Math.cos(angle);
 
-        p.sendMessage(x + ", " + y);
+
         return new Vector(dir.getX()*(1+x), y, dir.getZ()*(1+x));
         }
 
